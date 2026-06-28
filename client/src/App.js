@@ -7,7 +7,9 @@ import AddTransaction from './components/AddTransaction';
 import { GlobalProvider, GlobalContext } from './context/GlobalState';
 import ExpenseChart from './components/ExpenseChart';
 import Toast from './components/Toast';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from './components/LoginForm/LoginForm';
 
 function MainLayout() {
   const { getTransactions } = useContext(GlobalContext);
@@ -42,11 +44,25 @@ function MainLayout() {
 }
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(  localStorage.getItem("isLoggedIn") === "true");
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn")
+    setIsLoggedIn(false);
+  };
   return (
     <GlobalProvider>
-      <Header />
-      <MainLayout />
-      <Toast />
+      {isLoggedIn ? (
+        <>
+          <Header  onLogout={handleLogout}/>
+          <MainLayout />
+          <Toast />
+        </>
+      ) : (
+        <Login onSubmit={handleLogin} />
+      )}
     </GlobalProvider>
   );
 }
