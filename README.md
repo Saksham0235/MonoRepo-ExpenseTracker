@@ -6,8 +6,8 @@ A full-stack expense tracking application built to help users manage personal fi
 
 ## 🚀 Live Demo
 
-- **Frontend:** https://expense-tracker-two-dun.vercel.app/
-- **Backend API:** https://expense-tracker-backend-dv1a.onrender.com/api/expenses
+- **Frontend:** https://expense-tracker-pktyk2xkz-saksham0235s-projects.vercel.app/
+- **Backend API:** https://monorepo-expensetracker.onrender.com/api/expenses
 
 ---
 
