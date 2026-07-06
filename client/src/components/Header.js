@@ -6,7 +6,7 @@ const Header = ({onLogout}) => {
       <div className="logo-icon">💸</div>
       <h2>Expense Tracker</h2>
       <span className="header-sub">Personal Finance</span>
-      <button onClick={onLogout}>Logout</button>
+      <button className="cursor-pointer bg-white border-spacing-1 text-black p-2 rounded-md" onClick={onLogout}>Logout</button>
     </header>
   );
 };

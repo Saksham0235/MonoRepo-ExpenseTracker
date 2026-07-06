@@ -8,7 +8,6 @@ import { GlobalProvider, GlobalContext } from './context/GlobalState';
 import ExpenseChart from './components/ExpenseChart';
 import Toast from './components/Toast';
 import { useEffect, useContext, useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './components/LoginForm/LoginForm';
 
 function MainLayout() {
