@@ -7,7 +7,7 @@ import AddTransaction from './components/AddTransaction';
 import { GlobalProvider, GlobalContext } from './context/GlobalState';
 import ExpenseChart from './components/ExpenseChart';
 import Toast from './components/Toast';
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import Login from './components/LoginForm/LoginForm';
 
 function MainLayout() {
@@ -42,28 +42,43 @@ function MainLayout() {
   );
 }
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(  localStorage.getItem("isLoggedIn") === "true");
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn")
-    setIsLoggedIn(false);
-  };
+function AppContent() {
+  const {
+    isAuthenticated,
+    authLoading,
+    checkAuth,
+    logout
+  } = useContext(GlobalContext);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (authLoading) {
+    return <div>Checking authentication...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
   return (
-    <GlobalProvider>
-      {isLoggedIn ? (
-        <>
-          <Header  onLogout={handleLogout}/>
-          <MainLayout />
-          <Toast />
-        </>
-      ) : (
-        <Login onSubmit={handleLogin} />
-      )}
-    </GlobalProvider>
+    <>
+      <Header onLogout={logout} />
+      <MainLayout />
+      <Toast />
+    </>
   );
 }
+
+function App() {
+  return (
+    <GlobalProvider>
+      <AppContent />
+    </GlobalProvider>
+    
+  );
+}
+
 
 export default App;

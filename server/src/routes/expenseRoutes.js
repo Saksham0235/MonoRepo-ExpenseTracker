@@ -1,13 +1,13 @@
-const express=require("express");
+import express from "express";
 
 const router=express.Router();
 
-const {
+import  {
     getExpenses,
     addExpense,
     updateExpense,
     deleteExpense
-}=require("../controllers/expenseController.js");
+} from "../controllers/expenseController.js";
 
 
 router.get("/",getExpenses);
@@ -15,4 +15,4 @@ router.post("/",addExpense);
 router.put("/:id",updateExpense);
 router.delete("/:id",deleteExpense);
 
-module.exports=router;
+export default router;

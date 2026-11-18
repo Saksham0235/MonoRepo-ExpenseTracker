@@ -1,18 +1,85 @@
 import React, { createContext, useReducer, useCallback } from 'react';
 import appReducer from './AppReducer';
 import { addExpense, deleteExpense, getExpenses, updateExpense } from '../services/expenseService';
+import { loginUser, logoutUser, registerUser, getCurrentUser } from '../services/authService';
 
 const initialState = {
   transactions: [],
   error: null,
   loading: true,
   notification: null,
+  user: null,
+  authLoading: true,
+  isAuthenticated: false,
 };
 
 export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+
+    // LOGIN
+  const login = async (email, password) => {
+    dispatch({ type: 'AUTH_LOADING', payload: true });
+
+    try {
+      const data = await loginUser({ email, password });
+
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: data.user,
+      });
+
+      return data.user;
+
+    } catch (error) {
+      dispatch({
+        type: 'AUTH_ERROR',
+        payload: error.message,
+      });
+
+      throw error;
+    }
+  };
+
+  // CHECK EXISTING SESSION
+  const checkAuth = useCallback(async () => {
+    dispatch({ type: 'AUTH_LOADING', payload: true });
+
+    try {
+      const data = await getCurrentUser();
+
+      dispatch({
+        type: 'AUTH_SUCCESS',
+        payload: data.user,
+      });
+
+    } catch (error) {
+      // No valid session exists
+      dispatch({ type: 'LOGOUT' });
+    }
+  }, []);
+
+  // LOGOUT
+  const logout = async () => {
+    try {
+      await logoutUser();
+      dispatch({ type: 'LOGOUT' });
+    } catch (error) {
+      console.error('Logout failed:', error);
+      throw error;
+    }
+  };
+
+  // REGISTER
+  const register = async (email, password) => {
+    try {
+      return await registerUser({ email, password });
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const getTransactions = useCallback(async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
@@ -72,6 +139,10 @@ export const GlobalProvider = ({ children }) => {
       deleteTransaction,
       updateTransaction,
       clearNotification,
+      logout,
+      checkAuth,
+      login,
+      register
     }}>
       {children}
     </GlobalContext.Provider>
