@@ -1,5 +1,37 @@
 function appReducer(state, action) {
   switch (action.type) {
+  case 'AUTH_LOADING':
+  return { ...state, authLoading: action.payload };
+
+case 'LOGIN_SUCCESS':
+case 'AUTH_SUCCESS':
+  return {
+    ...state,
+    user: action.payload,
+    isAuthenticated: true,
+    authLoading: false,
+    error: null,
+  };
+
+case 'LOGOUT':
+  return {
+    ...state,
+    user: null,
+    isAuthenticated: false,
+    transactions: [],
+    loading: false,
+    authLoading: false,
+    error: null,
+  };
+
+case 'AUTH_ERROR':
+  return {
+    ...state,
+    user: null,
+    isAuthenticated: false,
+    authLoading: false,
+    error: action.payload,
+  };
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
     case 'SET_NOTIFICATION':

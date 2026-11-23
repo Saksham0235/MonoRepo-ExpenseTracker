@@ -1,11 +1,11 @@
-const db = require("../db/database")
+import db from "../db/database.js"
 
 const getStmt = db.prepare("SELECT * FROM expenses ORDER BY date DESC");
 const insertStmt = db.prepare("INSERT INTO expenses (amount,category,date,note) VALUES(?,?,?,?)");
 const updateStmt = db.prepare("UPDATE expenses SET amount=?,category=?,date=?,note=? WHERE id=?");
 const deleteStmt = db.prepare("DELETE FROM expenses WHERE id=?");
 
-exports.getExpenses = (_req, res, next) => {
+export const getExpenses = (req, res, next) => {
     try {
         const expenses = getStmt.all();
         res.json(expenses);
@@ -14,7 +14,7 @@ exports.getExpenses = (_req, res, next) => {
     }
 };
 
-exports.addExpense = (req, res, next) => {
+export const addExpense = (req, res, next) => {
     try {
         const { amount, category, date, note } = req.body;
 
@@ -38,7 +38,7 @@ exports.addExpense = (req, res, next) => {
     }
 };
 
-exports.updateExpense = (req, res, next) => {
+export const updateExpense = (req, res, next) => {
     try {
         const { id } = req.params;
         const { amount, category, date, note } = req.body;
@@ -68,7 +68,7 @@ exports.updateExpense = (req, res, next) => {
     }
 };
 
-exports.deleteExpense = (req, res, next) => {
+export const deleteExpense = (req, res, next) => {
     try {
         const { id } = req.params;
         const result = deleteStmt.run(id);
